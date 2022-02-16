@@ -11,7 +11,6 @@ struct ContentView: View {
     
     @State private var pause: Bool = true
     @State private var volume: Double = 0.0
-
     
     var body: some View {
         ZStack{
@@ -30,10 +29,10 @@ struct ContentView: View {
                             radius: 30, x: 0, y:30)
                 Spacer()
                 SongInfoView()
-                SliderView()
+                SliderView(pause: $pause)
                     .padding([.leading, .trailing], 30)
-                PlayPauseView(pause: $pause)
-                    .padding([.top, .bottom], 20)
+//                PlayPauseView(pause: $pause)
+//                    .padding([.top, .bottom], 20)
 //                Spacer()
                 VolumeView(volume: $volume)
                     .padding([.top, .bottom], 20)
@@ -79,11 +78,18 @@ struct BackgroundView: View {
 
 struct SliderView: View {
     
-    var duration: Double = 120
-    
+    var duration: Double = 328
+    @Binding var pause: Bool
     @State private var time: Double = 0.0
+    
+//    @objc func tick(){
+//        time += 1
+//    }
 
     var body: some View {
+        
+//        var timer: Timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: time += 1, userInfo: nil, repeats: true)
+        
         let min: Int = Int(time) / 60
         let tenths: Int = Int(time) % 60 / 10
         let singles: Int = Int(time) % 60 % 10
@@ -97,7 +103,6 @@ struct SliderView: View {
             
             Slider(value: $time, in: 0...duration)
                 .accentColor(Color.white)
-//                .font(.caption)
             
             HStack{
                 Text("\(min):\(tenths)\(singles)")
@@ -106,6 +111,26 @@ struct SliderView: View {
                 Text("-\(mintot):\(tenthstot)\(singlestot)")
                     .foregroundColor(.white)
             }
+            HStack{
+                Image(systemName: "backward.fill")
+                    .font(.system(size: 35))
+                    .foregroundColor(.white)
+                Spacer()
+                Button{
+                    pause.toggle()
+                } label: {
+                    Image(systemName: pause ? "play.fill": "pause.fill")
+                        .font(.system(size: 60))
+                        .foregroundColor(.white)
+                }
+                Spacer()
+                Image(systemName: "forward.fill")
+                    .font(.system(size: 35))
+                    .foregroundColor(.white)
+                
+            }.padding([.leading, .trailing], 50)
+                .padding([.top, .bottom], 10)
+                
         }
     }
 }
@@ -137,7 +162,6 @@ struct SongInfoView: View {
 struct PlayPauseView: View {
     
     @Binding var pause: Bool
-
     
     var body: some View {
         HStack{
