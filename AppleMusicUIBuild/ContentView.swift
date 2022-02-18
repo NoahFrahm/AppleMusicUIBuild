@@ -85,9 +85,14 @@ struct SliderView: View {
 //    @objc func tick(){
 //        time += 1
 //    }
+    let timer = Timer.publish(every: 0.0001, on: .main, in: .common).autoconnect()
 
     var body: some View {
         
+        if (pause) {
+//            onReceive(timer, perform: {output in time += 1
+//            })
+        }
 //        var timer: Timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: time += 1, userInfo: nil, repeats: true)
         
         let min: Int = Int(time) / 60
@@ -103,6 +108,10 @@ struct SliderView: View {
             
             Slider(value: $time, in: 0...duration)
                 .accentColor(Color.white)
+                .onReceive(timer, perform: {
+                    output in
+                    if (!pause && time < duration) {time += 1}
+                })
             
             HStack{
                 Text("\(min):\(tenths)\(singles)")
@@ -120,9 +129,9 @@ struct SliderView: View {
                     pause.toggle()
                 } label: {
                     Image(systemName: pause ? "play.fill": "pause.fill")
-                        .font(.system(size: 60))
+                        .font(.system(size: 50))
                         .foregroundColor(.white)
-                }
+                }.frame(width: 100, height: 60, alignment: .center)
                 Spacer()
                 Image(systemName: "forward.fill")
                     .font(.system(size: 35))
@@ -174,15 +183,20 @@ struct PlayPauseView: View {
             } label: {
                 Image(systemName: pause ? "play.fill": "pause.fill")
                     .font(.system(size: 60))
+//                    .frame(width: 10, height: 10, alignment: .center)
                     .foregroundColor(.white)
             }
+//            .frame(width: 10, height: 10, alignment: .center)
+//            Image(systemName: "forward.fill")
             Spacer()
             Image(systemName: "forward.fill")
                 .font(.system(size: 35))
                 .foregroundColor(.white)
             
-        }.padding([.leading, .trailing], 70)
-            
+        }
+//        .frame(width: 10, height: 10, alignment: .center)
+        .padding([.leading, .trailing], 70)
+        
     }
 }
 
