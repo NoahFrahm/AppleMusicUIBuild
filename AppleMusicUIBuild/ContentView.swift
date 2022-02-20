@@ -85,15 +85,12 @@ struct SliderView: View {
 //    @objc func tick(){
 //        time += 1
 //    }
-    let timer = Timer.publish(every: 0.0001, on: .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: 0.001, on: .main, in: .common).autoconnect()
 
     var body: some View {
         
-        if (pause) {
-//            onReceive(timer, perform: {output in time += 1
-//            })
-        }
-//        var timer: Timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: time += 1, userInfo: nil, repeats: true)
+ 
+
         
         let min: Int = Int(time) / 60
         let tenths: Int = Int(time) % 60 / 10
@@ -110,7 +107,7 @@ struct SliderView: View {
                 .accentColor(Color.white)
                 .onReceive(timer, perform: {
                     output in
-                    if (!pause && time < duration) {time += 1}
+                    if (!pause && time < duration) {time += 0.001}
                 })
             
             HStack{
